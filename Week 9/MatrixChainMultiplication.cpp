@@ -1,49 +1,50 @@
-#include <iostream>
-#include <vector>
-#include <climits>
+#include <stdio.h>
 
-using namespace std;
-
-int matrixMultiplication(vector<int> &arr)
+int main()
 {
-    int n = arr.size();
+    int A[10][10], B[10][10], C[10][10];
+    int r1;
+    int c1;
+    int r2;
+    int c2;
 
-    // Create a 2D DP array to store the minimum multiplication costs
-    vector<vector<int>> dp(n, vector<int>(n, 0));
+    printf("Enter the rows and columns for the matrix");
+    scanf("%d", &r1);
+    scanf("%d", &r2);
+    scanf("%d", &c1);
+    scanf("%d", &c2);
 
-    // Fill the DP array.
-    for (int len = 2; len < n; len++)
-    {
-        for (int i = 0; i < n - len; i++)
-        {
-            int j = i + len;
-            dp[i][j] = INT_MAX;
+    if (c1 != r2) {
+        printf("Not possible\n");
+        return 0;
+    }
 
-            for (int k = i + 1; k < j; k++)
-            {
-                int cost = dp[i][k] + dp[k][j] + arr[i] * arr[k] * arr[j];
-                dp[i][j] = min(dp[i][j], cost);
+    printf("Enter elements for matrix A\n");
+    for (int i = 0; i < r1; i++)
+        for (int j = 0; j < c1; j++)
+            scanf("%d", &A[i][j]);
+
+    printf("Enter elements for matrix B\n");
+    for (int i = 0; i < r2; i++)
+        for (int j = 0; j < c2; j++)
+            scanf("%d", &B[i][j]);
+
+    for (int i = 0; i < r1; i++) {
+        for (int j = 0; j < c2; j++) {
+            C[i][j] = 0;
+            for (int k = 0; k < c1; k++) {
+                C[i][j] += A[i][k] * B[k][j];
             }
         }
     }
 
-    // The minimum cost is stored in dp[0][n-1]
-    return dp[0][n - 1];
-}
-
-int main()
-{
-    int n;
-    vector<int> arr;
-    cout << "Enter how many matrices you want: ";
-    cin >> n;
-    for(int i=0;i<=n;i++)
-    {
-        int input;
-        cout << "Enter dimension of Matrix: ";
-        cin >> input;
-        arr.push_back(input);
+    printf("Resultant Matrix C:\n");
+    for (int i = 0; i < r1; i++) {
+        for (int j = 0; j < c2; j++) {
+            printf("%d ", C[i][j]);
+        }
+        printf("\n");
     }
-    cout << "Minimum number of multiplication: " << matrixMultiplication(arr);
+
     return 0;
 }
