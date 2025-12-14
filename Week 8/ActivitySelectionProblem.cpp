@@ -1,48 +1,40 @@
-#include <iostream>
-#include <vector>
-using namespace std;
+#include <stdio.h>
 
-// Function to perform selection sort based on finish times
-void sortArrays(vector<int> &start, vector<int> &finish)
+void sortArrays(int start[], int finish[], int n)
 {
-    int n = finish.size();
-    for (int i = 0; i < n - 1; i++)
+    int i, j, min, temp;
+
+    for (i = 0; i < n - 1; i++)
     {
-        int minIndex = i;
-        for (int j = i + 1; j < n; j++)
+        min = i;
+        for (j = i + 1; j < n; j++)
         {
-            if (finish[j] < finish[minIndex])
-            {
-                minIndex = j;
-            }
+            if (finish[j] < finish[min])
+                min = j;
         }
 
-        // Swap finish times
-        int temp = finish[i];
-        finish[i] = finish[minIndex];
-        finish[minIndex] = temp;
+        temp = finish[i];
+        finish[i] = finish[min];
+        finish[min] = temp;
 
-        // Swap corresponding start times
         temp = start[i];
-        start[i] = start[minIndex];
-        start[minIndex] = temp;
+        start[i] = start[min];
+        start[min] = temp;
     }
 }
 
-int activitySelection(vector<int> &start, vector<int> &finish)
+int activitySelection(int start[], int finish[], int n)
 {
-    int n = start.size();
-
-    // Sort activities by finish time
-    sortArrays(start, finish);
-
-    // The first activity always gets selected
     int count = 1;
-    int lastFinish = finish[0];
+    int lastFinish;
+    int i;
 
-    for (int i = 1; i < n; i++)
+    sortArrays(start, finish, n);
+
+    lastFinish = finish[0];
+
+    for (i = 1; i < n; i++)
     {
-        // If the current activity starts after the last one finishes
         if (start[i] > lastFinish)
         {
             count++;
@@ -55,11 +47,13 @@ int activitySelection(vector<int> &start, vector<int> &finish)
 
 int main()
 {
-    vector<int> start = {1, 3, 0, 5, 8, 5};
-    vector<int> finish = {2, 4, 6, 7, 9, 9};
+    int start[] = {1, 3, 0, 5, 8, 5};
+    int finish[] = {2, 4, 6, 7, 9, 9};
+    int n = 6;
 
-    int result = activitySelection(start, finish);
-    cout << "Maximum number of activities: " << result << endl;
+    int result = activitySelection(start, finish, n);
+
+    printf("Maximum number of activities: %d", result);
 
     return 0;
 }
